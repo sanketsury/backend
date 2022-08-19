@@ -1,19 +1,17 @@
 const mongoose = require('mongoose');
 
+const bookSchema = new mongoose.Schema( {
+    bookName: {  type : String,
+        required: true},
+    authorName: String, 
+    Year:Number
 
-// const bookSchema = new mongoose.Schema({
-//     bookName: string,
+    },{timestamps:true});
 
-//    bookAuthor: string,
-
-//      catagory:string,
-     
-//      year:Number
+    module.exports= mongoose.model('book',bookSchema)
 
 
-// },{ timestamps: true });
 
-// const userSchema = new mongoose.Schema( {
 //     firstName: String,
 //     lastName: String,
 //     mobile: {
@@ -37,17 +35,17 @@ const mongoose = require('mongoose');
 //  }, { timestamps: true });
 
 //  module.exports = mongoose.model('User', userSchema) //users
-const bookSchema = new mongoose.Schema({
-    bookName: string,
+// const bookSchema = new mongoose.Schema({
+//     bookName: string,
 
-   bookAuthor: string,
+//    bookAuthor: string,
 
-     catagory:string,
+//      catagory:string,
      
-     year:Number
+//      year:Number
 
 
-},{ timestamps: true });
-// String, Number
+// },{ timestamps: true });
+// // String, Number
 // Boolean, Object/json, array
-module.exports = mongoose.model('book', bookSchema)
+// module.exports = mongoose.model('book', bookSchema)
