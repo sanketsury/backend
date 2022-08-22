@@ -1,41 +1,23 @@
 const express = require('express');
 const router = express.Router();
-// const UserModel= require("../models/userModel.js")
-const UserController= require("../controllers/userController")
-const BookController= require("../controllers/bookController")
 
-router.get("/test-me", function (req, res) {
-    res.send("My first ever api!")
-})
+const AuthorController= require("../controllers/authorController")
 
-router.post("/createUser", UserController.createUser  )
+const BookController= require("../Controllers/bookcontroller")
 
-router.get("/getUsersData", UserController.getUsersData)
 
-router.post("/createBook", BookController.createBook  )
 
-router.get("/getBooksData", BookController.getBooksData)
 
-router.post("/updateBooks", BookController.updateBooks)
-router.post("/deleteBooks", BookController.deleteBooks)
 
-//MOMENT JS
-const moment = require('moment');
-router.get("/dateManipulations", function (req, res) {
-    
-    // const today = moment();
-    // let x= today.add(10, "days")
+router.post("/createAuthor", AuthorController.createAuthor )
 
-    // let validOrNot= moment("29-02-1991", "DD-MM-YYYY").isValid()
-    // console.log(validOrNot)
-    
-    const dateA = moment('01-01-1900', 'DD-MM-YYYY');
-    const dateB = moment('01-01-2000', 'DD-MM-YYYY');
+router.post("/createbook",   BookController.createBook  )
 
-    let x= dateB.diff(dateA, "days")
-    console.log(x)
+router.get("/getBook",   BookController.getBook  )
 
-    res.send({ msg: "all good"})
-})
+router.get("/updateBook",   BookController.updateBook)
+
+router.get("/bookrange",   BookController.bookrange)
+
 
 module.exports = router;
