@@ -15,4 +15,4 @@ const bookSchema = new mongoose.Schema( {
         ref:"newPublisher"
     }
 }, { timestamps: true });
-module.exports = mongoose.model('LibraryBook', bookSchema)
+module.exports = mongoose.model('Book', bookSchema)
