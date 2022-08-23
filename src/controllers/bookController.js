@@ -13,7 +13,7 @@ const newBook= async function (req, res) {
     // b)
     let author = await AuthorModel.findById(book.author)
     if(!author) {
-        return res.send({status: false, msg: "Author id is not valid"})
+        return res.send({status: false, msg: "Author id is not present "})
     }
 
     // c)
@@ -36,16 +36,19 @@ const getAllBooksWithCompleteDetails = async function (req, res) {
     res.send({data: allBooks})
 
 }
+const Newupdatebook = async function(req, res) {
+    let requiredPublishers = 
+    await publisherModel.find({$or: [{name: "Penguin"},{name: "HarperCollins"}]}, {_id: 1})
 
-//  const Newupdatebook= async function(req,res){
-// let author=await AuthorModel.find({rating:{$gt:3.5}}).select({id:1})
-// let updateprice=await BookModel.updateMany({author:author},{$inc:{price:10}})
-// let updatebook= await BookModel.find().populate(['author','publisher'])
+    let requiredPublisherIds = [] 
+    for (let i = 0; i < requiredPublishers.length; i++) {
+        requiredPublisherIds.push(requiredPublishers[i]._id)
+    }
+    let updatedBooks = await bookModel.updateMany({publisher : {$in: requiredPublisherIds}}, {isHardCover: true}, {new: true})
+    res.send({data: updatedBooks})
+}
 
-// res.send({data:updatebook})
-
-//  }
 
 module.exports.newBook=newBook
 module.exports.getAllBooksWithCompleteDetails=getAllBooksWithCompleteDetails
-// module.exports.Newupdatebook=Newupdatebook
+ module.exports.Newupdatebook=Newupdatebook
