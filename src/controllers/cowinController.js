@@ -40,8 +40,8 @@ let getDistricts = async function (req, res) {
 
 let getByPin = async function (req, res) {
     try {
-        let pin = req.query.pincode
-        let date = req.query.date
+        let pin = req.Query.pincode
+        let date = req.Query.date
         console.log(`query params are: ${pin} ${date}`)
         var options = {
             method: "get",
@@ -55,7 +55,28 @@ let getByPin = async function (req, res) {
         console.log(err)
         res.status(500).send({ msg: err.message })
     }
+}  
+
+
+
+       let getByDistrictId= async function(req, res){
+        try{
+        let district =req.query.districtId 
+        let date = req.query.date
+        console.log(`query param are:${district} ${date}`)
+         var options={
+                  method:"get",
+                  url:`https://cdn-api.co-vin.in/api/v4/appointment/sessions/findByDistrict?district_id=${district}&date=${date}`
+         }
+       let result =await axios(options)
+       let data =result.data
+    res.status (200).send({msg:data})
 }
+       catch (err) {
+             console.log(err)
+               res.status(500).send({ msg: err.message })
+    
+    } }
 
 let getOtp = async function (req, res) {
     try {
@@ -83,3 +104,4 @@ module.exports.getStates = getStates
 module.exports.getDistricts = getDistricts
 module.exports.getByPin = getByPin
 module.exports.getOtp = getOtp
+module.exports.getByDistrictId=getByDistrictId
