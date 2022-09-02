@@ -61,12 +61,13 @@ let getByPin = async function (req, res) {
 
        let getByDistrictId= async function(req, res){
         try{
-        let district =req.query.districtId 
+        let districtid =req.query.district_id 
         let date = req.query.date
-        console.log(`query param are:${district} ${date}`)
-         var options={
+        // console.log(`query param are:${district} ${date}`)
+         let options={
                   method:"get",
-                  url:`https://cdn-api.co-vin.in/api/v4/appointment/sessions/findByDistrict?district_id=${district}&date=${date}`
+                  url:`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByDistrict?district_id=${districtid}&date=${date}
+                  `
          }
        let result =await axios(options)
        let data =result.data
