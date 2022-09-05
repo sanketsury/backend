@@ -24,18 +24,11 @@ const createBlog = async function (req, res) {
 
 const getBlog = async function (req, res) {
     try {
-        const authorId = req.query.authorId
-        const category = req.query.category
-        const tags = req.query.tags
-        const subcategory = req.query.subcategory
-
         const query = req.query
-
-        //?authorId=2423&category=Electronics
 
         const blogs = await BlogModel.find({ $and: [query, { isDeleted: false }, { isPublished: true }] })
 
-        if (!blogs) {
+        if (blogs=="") {
             res.status(404).send({ status: false })
         }
         res.status(200).send({ status: true, data: blogs })
