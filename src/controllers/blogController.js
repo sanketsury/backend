@@ -76,7 +76,7 @@ const deleteBlogByQuery = async function (req, res) {
             return res.status(400).send({ status: false, msg: "Query Params cannot be empty" })
         }
 
-        query.isDeleted = "false"
+        query.isDeleted = "false" //Skip
 
         let deleteBlogs = await blogModel.updateMany(query, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
         console.log(deleteBlogs);
