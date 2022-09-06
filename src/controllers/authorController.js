@@ -1,14 +1,26 @@
 const AuthorModel = require("../models/authorModel")
 
-const createAuthor = async function(req, res){
+const createAuthor = async function (req, res) {
     try {
-       let data = req.body
-       
-       const author = await AuthorModel.create(data)
 
-       res.status(201).send({status: true, data: author })
+        const regexEmail = new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$");
+        // if(req.body.email.match(regexEmail)){
+        //     console.log(req.body.email);
+        // }else{
+        //     console.log('No');
+        // }
+
+        if(!req.body.email.match(regexEmail)){
+            return res.status(400).send({status: false, msg: "Invalid Email"})
+        }
+
+        let data = req.body
+
+        const author = await AuthorModel.create(data)
+
+        res.status(201).send({ status: true, data: author })
     } catch (error) {
-        res.status(500).send({status: false, msg: error.message})
+        res.status(500).send({ status: false, msg: error.message })
     }
 }
 

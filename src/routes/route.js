@@ -1,20 +1,16 @@
 const express = require('express');
-const router = express.Router();
-const authorController= require("../controllers/authorController")
-const blogController= require("../controllers/blogController")
+const router = express.Router(); //Skip
+const authorController = require("../controllers/authorController")
+const blogController = require("../controllers/blogController")
 
-router.get("/", function() {
-    console.log('Hello');
-})
+//Author
+router.post("/authors", authorController.createAuthor) //Create Author
 
-//author
-router.post("/authors", authorController.createAuthor)
-
-//blog
-router.post("/blogs", blogController.createBlog)
-router.get("/blogs", blogController.getBlog)
-router.put("/blogs/:blogId", blogController.updateBlog )
-router.delete("/blogs/:blogId", blogController.deleteBlog)
-router.delete("/blogs", blogController.deleteBlogByQuery)
+//Blog
+router.post("/blogs", blogController.createBlog) //Create Blog
+router.get("/blogs", blogController.getBlog) //Get All Blogs
+router.put("/blogs/:blogId", blogController.updateBlog) //Update Blog
+router.delete("/blogs/:blogId", blogController.deleteBlog) //Delete Blog by Specific Id
+router.delete("/blogs", blogController.deleteBlogByQuery) //Delete Blog by Using Query
 
 module.exports = router;
