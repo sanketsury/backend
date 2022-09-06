@@ -38,34 +38,42 @@ const getBlog = async function (req, res) {
 }
 
 const updateBlog = async function (req, res) {
-    let param = req.params.blogId
-    let blogId = await blogModel.findById(param)
-    if (!blogId) {
-        return res.status(404).send({ status: false, msg: "blogId is not found" })
-    }
-    let detail = req.body.title
-    let body = req.body.body
-    let tags = req.body.tags
-    let subcategory = req.body.subcategory
-    let data1 = await blogModel.updateMany({ _id: param, isPublished: true }, { title: detail, body: body, publishedAt: Date.now(), $push: { tags: tags, subcategory: subcategory } }, { new: true })  //Skip
+    try {
+        let param = req.params.blogId
+        let blogId = await blogModel.findById(param)
+        if (!blogId) {
+            return res.status(404).send({ status: false, msg: "blogId is not found" })
+        }
+        let detail = req.body.title
+        let body = req.body.body
+        let tags = req.body.tags
+        let subcategory = req.body.subcategory
+        let data1 = await blogModel.updateMany({ _id: param, isPublished: true }, { title: detail, body: body, publishedAt: Date.now(), $push: { tags: tags, subcategory: subcategory } }, { new: true })  //Skip
 
-    res.status(200).send({ satus: true, msg: data1 })
+        res.status(200).send({ satus: true, msg: data1 })
+    } catch (error) {
+        res.status(500).send({ status: false, msg: error.message })
+    }
 }
 
 const deleteBlog = async function (req, res) {
-    let id = req.params.blogId
-    if (!id) {
-        res.send({ msg: "id is mandatory" })
+    try {
+        let id = req.params.blogId
+        if (!id) {
+            res.send({ msg: "id is mandatory" })
+        }
+        let checkId = await blogModel.findById(id)
+        if (!checkId) {
+            res.send({ msg: "id is incorrect" })
+        }
+        if (checkId.isDeleted == true) {
+            res.status(404).send({ status: false, msg: "blog is already deleted" })
+        }
+        let checkDelete = await blogModel.updateMany({ _id: id }, { $set: { isDeleted: true } }, { new: true })
+        res.status(200).send({ status: true })
+    } catch (error) {
+        res.status(500).send({ status: false, msg: error.message })
     }
-    let checkId = await blogModel.findById(id)
-    if (!checkId) {
-        res.send({ msg: "id is incorrect" })
-    }
-    if (checkId.isDeleted == true) {
-        res.status(404).send({ status: false, msg: "blog is already deleted" })
-    }
-    let checkDelete = await blogModel.updateMany({ _id: id }, { $set: { isDeleted: true } }, { new: true })
-    res.status(200).send({ status: true })
 }
 
 const deleteBlogByQuery = async function (req, res) {

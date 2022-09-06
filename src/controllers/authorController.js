@@ -4,11 +4,6 @@ const createAuthor = async function (req, res) {
     try {
 
         const regexEmail = new RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$");
-        // if(req.body.email.match(regexEmail)){
-        //     console.log(req.body.email);
-        // }else{
-        //     console.log('No');
-        // }
 
         if(!req.body.email.match(regexEmail)){
             return res.status(400).send({status: false, msg: "Invalid Email"})
