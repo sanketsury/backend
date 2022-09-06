@@ -73,14 +73,24 @@ const deleteBlog = async function (req, res){
     res.status(200).send({status: true})
 }
 
+const deleteBlogByQuery = async function (req, res) {
+    let query = req.query
+    console.log(query);
+    if(!query){
+        return res.status(400).send({status: false, msg: "Query is required"})
+    }
 
-// const user = await blogModel.findById(id).select({isDeleted:1, _id:0})
-// if (user.isDeleted === true){
-//     res.send({msg: "user is deleted"})
-// }
+    let checkId = await blogModel.find({authorId: query.authorId, isDeleted: false})
+    console.log(checkId);
 
+    if(!checkId){
+        res.status(404).send({status: false, msg: "Nothing to delete"})
+    }
 
+    let deletedData = await blogModel.updateMany({authorId: query.authorId}, {$set: {isDeleted: true}}, {new: true})
 
+    res.status(200).send({status: true})
+}
 
 // try {
 //     let blogId = req.params.blogId;
@@ -105,7 +115,9 @@ const deleteBlog = async function (req, res){
 
 
 
+
 module.exports.createBlog = createBlog
 module.exports.getBlog = getBlog
 module.exports.updateBlog= updateBlog 
 module.exports.deleteBlog = deleteBlog
+module.exports.deleteBlogByQuery = deleteBlogByQuery
