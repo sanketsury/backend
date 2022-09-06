@@ -3,7 +3,6 @@ const router = express.Router();
 const authorController= require("../controllers/authorController")
 const blogController= require("../controllers/blogController")
 
-
 router.get("/", function() {
     console.log('Hello');
 })
@@ -16,6 +15,6 @@ router.post("/blogs", blogController.createBlog)
 router.get("/blogs", blogController.getBlog)
 router.put("/blogs/:blogId", blogController.updateBlog )
 router.delete("/blogs/:blogId", blogController.deleteBlog)
-router.delete("/blogss", blogController.deleteBlogByQuery)
+router.delete("/blogs", blogController.deleteBlogByQuery)
 
 module.exports = router;
