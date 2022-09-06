@@ -57,6 +57,31 @@ const updateBlog = async function (req,res){
      res.status(200).send({satus:true, msg: data1})
 }
 
+const deleteBlog = async function (req, res){
+    let id = req.params.blogId
+    if (!id){
+        res.send({msg: "id is mandatory"})
+    }
+    let checkId = await blogModel.findById(id)
+    if(!checkId){
+        res.send({msg: "id is incorrect"})
+    }
+    if(checkId.isDeleted == true){
+        res.status(404).send({status: false, msg: "blog is already deleted"})
+    }
+    let checkDelete = await blogModel.updateMany({_id: id}, {$set: {isDeleted: true}}, {new: true})
+    res.status(200).send({status: true})
+}
+
+
+// const user = await blogModel.findById(id).select({isDeleted:1, _id:0})
+// if (user.isDeleted === true){
+//     res.send({msg: "user is deleted"})
+// }
+
+
+
+
 // try {
 //     let blogId = req.params.blogId;
 //     let blogData = req.body;
@@ -83,3 +108,4 @@ const updateBlog = async function (req,res){
 module.exports.createBlog = createBlog
 module.exports.getBlog = getBlog
 module.exports.updateBlog= updateBlog 
+module.exports.deleteBlog = deleteBlog
