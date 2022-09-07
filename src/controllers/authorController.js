@@ -31,7 +31,7 @@ const login = async function (req, res){
     }
     let token = jwt.sign(
         {
-            userId: user.fname.toString(),
+            userId: user._id.toString(),
             group: 65,
         },
         "manthan_sanket_suyash_satyajit_group_65"

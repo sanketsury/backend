@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const blogModel = require("../models/blogModel")
 
 const authentication = async function(req, res, next){
     let token = req.headers['x-api-key']
@@ -12,3 +13,22 @@ const authentication = async function(req, res, next){
     }
     next()
 }
+
+const authorisation = async function (req, res, next){
+    try{
+        let blogId = req.params.blogId
+        let token = req.headers['x-api-key']
+        let decodedToken = jwt.verify(token, "manthan_sanket_suyash_satyajit_group_65")
+        let findBlog = await blogModel.findById(blogId);
+        if (findBlog) {
+          if (decodedToken.userId != findBlog.authorId)return res.status(403).send({ status: false, msg:"Author is not authorized to access this data"});
+        }
+         next()
+
+    }
+    catch (err){
+        return res.status(500).send({msg:err.message})
+    }
+}
+module.exports.authentication= authentication
+module.exports.authorisation=authorisation
