@@ -1,11 +1,11 @@
-const express = require("express")
-const mongoose = require("mongoose") //Skip library or function
-const bodyParser = require('body-parser');
+const express = require("express") // framework
+const mongoose = require("mongoose") // library 
+const bodyParser = require('body-parser'); // package (third party middleware)
 const route = require('./routes/route.js');
 const app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); //Skip
+app.use(bodyParser.urlencoded({ extended: true })); //Postman
 
 mongoose.connect("mongodb+srv://satyajitbera1796:18LuJ6umpLy3A35i@cluster0.puyfnq4.mongodb.net/Group65?retryWrites=true&w=majority", {
     useNewUrlParser: true //Skip

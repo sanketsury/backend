@@ -15,7 +15,6 @@ const blogSchema = new mongoose.Schema({
         require: true
     },
     tags: [String],
-
     category: {
         type: [String],
         required: true
@@ -35,6 +34,5 @@ const blogSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-
 }, { timestamps: true });
 module.exports = mongoose.model('Blog', blogSchema)

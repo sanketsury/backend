@@ -1,19 +1,21 @@
 const AuthorModel = require("../models/authorModel")
 const blogModel = require("../models/blogModel")
+// const mongoose = require("mongoose")
+// const ObjectId = mongoose.Schema.Types.ObjectId
+const ObjectId = require('mongoose').Types.ObjectId;
 
 
 const createBlog = async function (req, res) {
     try {
-        if (!req.body.authorId) {
-            res.status(400).send({ status: false, msg: "invalid request, Author Id is manditory" })
-        }
+        let data = req.body
 
+        if (!data.authorId) {
+            res.status(400).send({ status: false, msg: "Author id is required and must be valid" })
+        }
         const authorCheck = await AuthorModel.findOne({ _id: req.body.authorId })
         if (!authorCheck) {
-            res.status(404).send({ status: false, msg: "Author Id is incorrect" })
+            res.status(404).send({ status: false, msg: "No such data found" })
         }
-
-        let data = req.body
 
         const blog = await blogModel.create(data)
 
@@ -26,9 +28,10 @@ const createBlog = async function (req, res) {
 const getBlog = async function (req, res) {
     try {
         const query = req.query
+    
         const blogs = await blogModel.find({ $and: [query, { isDeleted: false }, { isPublished: true }] })
 
-        if (!blogs) {
+        if (blogs.length == 0) {
             res.status(404).send({ status: false })
         }
         res.status(200).send({ status: true, data: blogs })
@@ -41,6 +44,7 @@ const getBlog = async function (req, res) {
 const updateBlog = async function (req, res) {
     try {
         let param = req.params.blogId
+        
         let blogId = await blogModel.findById(param)
         if (!blogId) {
             return res.status(404).send({ status: false, msg: "blogId is not found" })
@@ -49,7 +53,7 @@ const updateBlog = async function (req, res) {
         let body = req.body.body
         let tags = req.body.tags
         let subcategory = req.body.subcategory
-        
+
         let data1 = await blogModel.updateMany({ _id: param, isPublished: true }, { title: detail, body: body, publishedAt: Date.now(), $push: { tags: tags, subcategory: subcategory } }, { new: true })  //Skip
 
         res.status(200).send({ satus: true, msg: data1 })
@@ -62,16 +66,16 @@ const deleteBlog = async function (req, res) {
     try {
         let id = req.params.blogId
         if (!id) {
-            res.send({ msg: "id is mandatory" })
+            res.status(400).send({ msg: "id is mandatory" })
         }
         let checkId = await blogModel.findById(id)
         if (!checkId) {
-            res.send({ msg: "id is incorrect" })
+            res.status(404).send({ msg: "id is incorrect" })
         }
         if (checkId.isDeleted == true) {
             res.status(404).send({ status: false, msg: "blog is already deleted" })
         }
-        let checkDelete = await blogModel.updateMany({ _id: id }, { $set: { isDeleted: true } }, { new: true })
+        let checkDelete = await blogModel.findOneAndUpdate({ _id: id }, { $set: { isDeleted: true } }, { new: true })
         res.status(200).send({ status: true })
     } catch (error) {
         res.status(500).send({ status: false, msg: error.message })
@@ -81,25 +85,21 @@ const deleteBlog = async function (req, res) {
 const deleteBlogByQuery = async function (req, res) {
     try {
         let query = req.query
-        console.log(query)
 
         if (Object.keys(query).length == 0) {
             return res.status(400).send({ status: false, msg: "Query Params cannot be empty" })
         }
 
-        query.isDeleted = false//Skip
-        //query.isPublished = true
-        
+        query.isDeleted = false
 
         let deleteBlogs = await blogModel.updateMany(query, { $set: { isDeleted: true, deletedAt: Date.now() } }, { new: true })
-        console.log(deleteBlogs);
+
         if (deleteBlogs.matchedCount == 0) {
             return res.status(404).send({ status: false, msg: "Blog Not Found or deleated" })
         }
 
         res.status(200).send({ status: true, msg: "Document is deleted" })
     } catch (error) {
-        console.log(error);
         res.status(500).send({ status: false, msg: error.message })
     }
 }
