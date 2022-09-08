@@ -3,7 +3,7 @@ const authorController = require("../controllers/authorController")
 
 // Regex
 const regexChar = new RegExp("^[a-zA-Z]*$")
-const regexEmail = new RegExp("/^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/")
+const regexEmail = new RegExp("/\S+@\S+\.\S+/")
 const regexPassword = new RegExp("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$")
 
 // Create Author Validation
@@ -27,11 +27,11 @@ if (!data.title || data.title != "Mr" && data.title != "Mrs" && data.title != "M
     return res.status(400).send({ status: false, msg: "Title can only be Mr, Mrs or Miss" })
 }
 
-if (!data.email ) {
+if (!data.email && !data.email.match(regexEmail)) {
     return res.status(400).send({ status: false, msg: "Invalid Email" })
 }
 
-if (!data.password) {
+if (!data.password || !data.password.match(regexPassword)) {
     return res.status(400).send({ status: false, msg: "Minimum eight characters, at least one letter and one number" })
 }
 next()
@@ -43,11 +43,11 @@ const loginValidation = function(req, res, next){
 let userName = req.body.email
 let password = req.body.password
 
-if (!userName) {
+if (!userName || !userName.match(regexEmail)) {
     return res.status(400).send({ status: false, msg: "Invalid Email" })
 }
 
-if (!password) {
+if (!password || !password.match(regexPassword)) {
     return res.status(400).send({ status: false, msg: "Minimum eight characters, at least one letter and one number" })
 }
 next()

@@ -46,11 +46,11 @@ if (!body) {
     return res.status(400).send({ status: false, msg: "Body is required" })
 }
 
-if (typeof (tags) != 'string') {
+if (tags && typeof (tags) != 'string') {
     res.status(400).send({ status: false, msg: "Tags should be string" })
 }
 
-if (typeof (subcategory) != 'string') {
+if (subcategory && typeof (subcategory) != 'string') {
     res.status(400).send({ status: false, msg: "Subcategory should be string" })
 }
 next()
