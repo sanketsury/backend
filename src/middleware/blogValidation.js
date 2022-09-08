@@ -1,7 +1,7 @@
 const blogModel = require("../models/blogModel")
 const blogController = require("../controllers/blogController")
 
-const regexCharAndNum = new RegExp("^[a-zA-Z0-9_.-]*$")
+const regexCharAndNum = new RegExp(/^[a-z\d\-_\s]+$/i)  
 
 // Create Blog Validation
 
@@ -15,13 +15,13 @@ let data = req.body
         if (!data.body) {
             return res.status(400).send({ status: false, msg: "Body is required" })
         }
-
+         
         if (typeof (data.tags) != "object") {
             res.status(400).send({ status: false, msg: "Tags should be string" })
         }
 
         if (typeof (data.category) != 'object') {
-            res.status(400).send({ status: false, msg: "Category should be string" })
+            res.status(400).send({ status: false, msg: "Category should be string 12" })
         }
 
         if (typeof (data.subcategory) != 'object') {
@@ -46,16 +46,16 @@ if (!body) {
     return res.status(400).send({ status: false, msg: "Body is required" })
 }
 
-if (tags && typeof (tags) != 'string') {
-    res.status(400).send({ status: false, msg: "Tags should be string" })
+if (tags && typeof (tags) != 'object') {
+    res.status(400).send({ status: false, msg: "Tags should be string " })
 }
 
-if (subcategory && typeof (subcategory) != 'string') {
+if (subcategory && typeof (subcategory) != 'object') {
     res.status(400).send({ status: false, msg: "Subcategory should be string" })
 }
 next()
 }
 
-module.exports.blogValidation = blogValidation
+module.exports.blogValidation = blogValidation 
 
 module.exports.updateValidation = updateValidation

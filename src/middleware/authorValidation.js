@@ -2,9 +2,9 @@ const authorModel = require("../models/authorModel")
 const authorController = require("../controllers/authorController")
 
 // Regex
-const regexChar = new RegExp("^[a-zA-Z]*$")
-const regexEmail = new RegExp("/\S+@\S+\.\S+/")
-const regexPassword = new RegExp("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$")
+const regexChar = new RegExp(/^[a-zA-Z]*$/)
+const regexEmail = new RegExp(/\S+@\S+\.\S+/)
+const regexPassword = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
 
 // Create Author Validation
 
@@ -27,7 +27,7 @@ if (!data.title || data.title != "Mr" && data.title != "Mrs" && data.title != "M
     return res.status(400).send({ status: false, msg: "Title can only be Mr, Mrs or Miss" })
 }
 
-if (!data.email && !data.email.match(regexEmail)) {
+if (!data.email || !data.email.match(regexEmail)) {
     return res.status(400).send({ status: false, msg: "Invalid Email" })
 }
 
@@ -39,7 +39,7 @@ next()
 
 // Login Validation
 
-const loginValidation = function(req, res, next){
+const loginValidation = function(req, res, next){ 
 let userName = req.body.email
 let password = req.body.password
 
