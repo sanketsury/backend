@@ -16,6 +16,9 @@ const createBlog = async function (req, res) {
         if (!authorCheck) {
             res.status(404).send({ status: false, msg: "No such data found" })
         }
+        if (data.isPublished == true){
+            data.publishedAt = Date.now()
+        }
 
         const blog = await blogModel.create(data)
 

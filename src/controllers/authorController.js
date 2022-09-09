@@ -1,5 +1,4 @@
-const authorModel = require("../models/authorModel");
-const AuthorModel = require("../models/authorModel")
+const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken")
 
 const createAuthor = async function (req, res) {
@@ -7,7 +6,7 @@ const createAuthor = async function (req, res) {
 
         let data = req.body
 
-        const author = await AuthorModel.create(data)
+        const author = await authorModel.create(data)
 
         res.status(201).send({ status: true, data: author })
     } catch (error) {
