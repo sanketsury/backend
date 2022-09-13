@@ -35,31 +35,39 @@ const getBlog = async function (req, res) {
         const blogs = await blogModel.find({ $and: [query, { isDeleted: false }, { isPublished: true }] })
 
         if (blogs.length == 0) {
-            res.status(404).send({ status: false })
+            return res.status(404).send({ status: false })
         }
-        res.status(200).send({ status: true, data: blogs })
+        return res.status(200).send({ status: true, data: blogs })
 
     } catch (error) {
-        res.status(500).send({ status: false, msg: error.message })
+        return res.status(500).send({ status: false, msg: error.message })
     }
 }
 
 const updateBlog = async function (req, res) {
     try {
         let param = req.params.blogId
-        
-        let blogId = await blogModel.findById(param)
-        if (!blogId) {
-            return res.status(404).send({ status: false, msg: "blogId is not found" })
+
+        let data = req.body
+
+        if(Object.keys(data).length==0){
+       return res.status(404).send({ msg: "No data for Update" })
+ }
+
+        if (!param) {
+           return res.status(400).send({ msg: "id is mandatory" })
         }
-        let detail = req.body.title
-        let body = req.body.body
-        let tags = req.body.tags
-        let subcategory = req.body.subcategory
+        let checkId = await blogModel.findById({_id: param})
+        if (!checkId) {
+            return res.status(404).send({ msg: "id is incorrect" })
+        }
+        if (checkId.isDeleted == true) {
+           return res.status(404).send({ status: false, msg: "blog is already deleted" })
+        }
+        // let data1 = await blogModel.updateMany({ _id: param, isPublished: true, isDeleted: false }, {data}, { new: true })  
+        let data1 = await blogModel.updateMany({ _id: param, isPublished: true, isDeleted: false }, { title: data.title, body: data.body, $push: { tags: data.tags, subcategory: data.subcategory } }, { new: true })  //Skip
 
-        let data1 = await blogModel.updateMany({ _id: param, isPublished: true }, { title: detail, body: body, publishedAt: Date.now(), $push: { tags: tags, subcategory: subcategory } }, { new: true })  //Skip
-
-        res.status(200).send({ satus: true, msg: data1 })
+        res.status(200).send({ status: true, msg: data1 })
     } catch (error) {
         res.status(500).send({ status: false, msg: error.message })
     }
@@ -106,8 +114,6 @@ const deleteBlogByQuery = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-
-
 
 
 module.exports.createBlog = createBlog

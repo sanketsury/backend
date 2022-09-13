@@ -13,9 +13,8 @@ router.post("/login",authorValidation.loginValidation, authorController.login)
 //Blog
 router.post("/blogs",blogValidation.blogValidation, middleware.authentication, blogController.createBlog) //Create Blog
 router.get("/blogs", middleware.authentication, blogController.getBlog) //Get All Blogs
-router.put("/blogs/:blogId",blogValidation.updateValidation, middleware.authentication, middleware.authorisation, blogController.updateBlog) //Update Blog
+router.put("/blogs/:blogId", middleware.authentication, middleware.authorisation, blogController.updateBlog) //Update Blog
 router.delete("/blogs/:blogId",middleware.authentication, middleware.authorisation, blogController.deleteBlog) //Delete Blog by Specific Id
 router.delete("/blogs",middleware.authentication, blogController.deleteBlogByQuery) //Delete Blog by Using Query
-
 
 module.exports = router;

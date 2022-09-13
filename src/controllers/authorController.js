@@ -5,7 +5,7 @@ const createAuthor = async function (req, res) {
     try {
 
         let data = req.body
-
+        
         const author = await authorModel.create(data)
 
         res.status(201).send({ status: true, data: author })
