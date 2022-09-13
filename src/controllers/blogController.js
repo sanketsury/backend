@@ -64,7 +64,6 @@ const updateBlog = async function (req, res) {
         if (checkId.isDeleted == true) {
            return res.status(404).send({ status: false, msg: "blog is already deleted" })
         }
-        // let data1 = await blogModel.updateMany({ _id: param, isPublished: true, isDeleted: false }, {data}, { new: true })  
         let data1 = await blogModel.updateMany({ _id: param, isPublished: true, isDeleted: false }, { title: data.title, body: data.body, $push: { tags: data.tags, subcategory: data.subcategory } }, { new: true })  //Skip
 
         res.status(200).send({ status: true, msg: data1 })
